@@ -7,13 +7,33 @@ public abstract class Alojamiento {
     private String city;
     private int rating; // Calificación de 1 a 5
     private List<Room> rooms; //lista de habitaciones
+    private String accommodationType;
+    private double calculatedPrice;
 
 
-    public Alojamiento(String name, String city, int rating, List<Room> rooms) {
+    public Alojamiento(String name, String city, int rating, List<Room> rooms, String accommodationType, double calculatedPrice) {
         this.name = name;
         this.city = city;
         this.rating = rating;
         this.rooms = rooms;
+        this.accommodationType = accommodationType;
+        this.calculatedPrice = calculatedPrice;
+    }
+
+    public String getAccommodationType() {
+        return accommodationType;
+    }
+
+    public void setAccommodationType(String accommodationType) {
+        this.accommodationType = accommodationType;
+    }
+
+    public double getCalculatedPrice() {
+        return calculatedPrice;
+    }
+
+    public void setCalculatedPrice(double calculatedPrice) {
+        this.calculatedPrice = calculatedPrice;
     }
 
     public String getName() {

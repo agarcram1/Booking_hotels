@@ -3,14 +3,13 @@ package Com.BookingHotels;
 import java.util.List;
 
 // Clase para representar un hotel
-public class Hotel extends Alojamiento implements Cloneable {
+public class Hotel extends Alojamiento implements ICalculate {
     private String accommodationType; // Hotel, apartamento, finca
 
-    public Hotel(String name, String city, int rating, List<Room> rooms, String accommodationType) {
-        super(name, city, rating, rooms);
+    public Hotel(String name, String city, int rating, List<Room> rooms, String accommodationType, double calculatedPrice) {
+        super(name, city, rating, rooms, accommodationType, calculatedPrice);
         this.accommodationType = accommodationType;
     }
-
     public String getAccommodationType() {
         return accommodationType;
     }
@@ -27,7 +26,7 @@ public class Hotel extends Alojamiento implements Cloneable {
         System.out.println("Type of hotel: " + getAccommodationType());
         System.out.println("Rooms: ");
         for (Room room : getRooms()) {
-            System.out.println(room.getRoomType() + " - " + room.getPrice() + " €/night");
+            System.out.println("Habitación: " + room.getRoomType() + ", Precio por noche: $" + room.getPrice());
         }
     }
 
