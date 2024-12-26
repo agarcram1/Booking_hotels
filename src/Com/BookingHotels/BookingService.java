@@ -30,9 +30,9 @@ public class BookingService {
         long days = ChronoUnit.DAYS.between(checkIn, checkOut);
         double totalPrice = days * pricePerNight * numberOfRooms;
 
-        boolean lastFiveDays = checkOut.getDayOfMonth() > 25;
-        boolean between10and15 = checkIn.getDayOfMonth() <= 15 && checkOut.getDayOfMonth() >= 10;
-        boolean between5and10 = checkIn.getDayOfMonth() <= 10 && checkOut.getDayOfMonth() >= 5;
+        boolean lastFiveDays = checkOut.getDayOfMonth() > 25; // Últimos 5 días del mes
+        boolean between10and15 = checkIn.getDayOfMonth() <= 15 && checkOut.getDayOfMonth() >= 10; // Entre el 10 y el 15
+        boolean between5and10 = checkIn.getDayOfMonth() <= 10 && checkOut.getDayOfMonth() >= 5; // Entre el 5 y el 10
 
         if (lastFiveDays) {
             totalPrice *= 1.15; // Incremento de 15%
