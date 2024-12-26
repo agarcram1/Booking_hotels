@@ -55,7 +55,7 @@ public class BookingService {
         return isAvailable;
     }
 
-    public String makerReservation(String nameClient, String lastNameClient, String email, String nacionality, String phone, String arrivalTime, Alojamiento alojamiento, Room room, LocalDate checkIn, LocalDate checkOut, double price) {
+    public String makeReservation(String nameClient, String lastNameClient, String email, String nacionality, String phone, String arrivalTime, Alojamiento alojamiento, Room room, LocalDate checkIn, LocalDate checkOut, double price) {
         Booking booking = new Booking(nameClient, lastNameClient, email, nacionality, phone, arrivalTime, alojamiento, room, checkIn, checkOut, price);
         bookings.add(booking);
         room.setAvailable(false); // Reduce la disponibilidad de la habitación

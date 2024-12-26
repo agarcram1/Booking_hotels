@@ -10,35 +10,35 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         List<Alojamiento> accommodations = new ArrayList<>();
 
-        // Create accommodations
+        // Crear alojamientos
         List<Room> roomsHotel1 = new ArrayList<>();
         roomsHotel1.add(new Room("Simple", 60000, "1 cama, con aire acondicionado", true));
         roomsHotel1.add(new Room("Doble", 120000, "2 camas, aire acondicionado y baño privado", true));
         roomsHotel1.add(new Room("Suite", 180000, "1 cama king, jacuzzi, aire acondicionado", true));
         roomsHotel1.add(new Room("Triple", 140000, "3 camas, aire acondicionado y baño privado", true));
-        roomsHotel1.add(new Room("Familair", 200000, "4 camas, aire acondicionado y baño privado", true));
-        Hotel hotel1 = new Hotel("Hotel cartagena", "Cartagena", 5, roomsHotel1, "Hotel", 0);
+        roomsHotel1.add(new Room("Familiar", 200000, "4 camas, aire acondicionado y baño privado", true));
+        Hotel hotel1 = new Hotel("Hotel Cartagena", "Cartagena", 5, roomsHotel1, "Hotel", 0);
         accommodations.add(hotel1);
 
         List<Room> roomsHotel2 = new ArrayList<>();
         roomsHotel2.add(new Room("Suite", 200000, "1 cama king, jacuzzi, aire acondicionado", true));
         roomsHotel2.add(new Room("Doble", 150000, "2 camas, aire acondicionado y baño privado", true));
-        roomsHotel2.add(new Room("Sencilla", 80000, "1 cama, aire acondicionado y balcon", true));
+        roomsHotel2.add(new Room("Sencilla", 80000, "1 cama, aire acondicionado y balcón", true));
         roomsHotel2.add(new Room("Familiar", 250000, "4 camas, aire acondicionado y baño privado", true));
-        roomsHotel2.add(new Room("presidencial", 300000, "1  cama king , jacuzzi, aire acondicionado, sala de estar", true));
-        Hotel hotel2 = new Hotel("Hotel bogota", "Bogota", 4, roomsHotel2, "Hotel", 0);
+        roomsHotel2.add(new Room("Presidencial", 300000, "1 cama king, jacuzzi, aire acondicionado, sala de estar", true));
+        Hotel hotel2 = new Hotel("Hotel Bogotá", "Bogotá", 4, roomsHotel2, "Hotel", 0);
         accommodations.add(hotel2);
 
         List<Room> roomsDayOfSun = new ArrayList<>();
         roomsDayOfSun.add(new Room("Cabaña", 50000, "Vista a la represa, piscina privada", true));
-        List<String> activities = List.of("Natacion", "Tennis", "Spa");
+        List<String> activities = List.of("Natación", "Tenis", "Spa");
         DayOfSun dayOfSun = new DayOfSun("Club Sol y Arena", "Peñol", 4, roomsDayOfSun, activities, true, "DayOfSun", 0);
         accommodations.add(dayOfSun);
 
         BookingService bookingService = new BookingService(accommodations, new ArrayList<>());
 
         while (true) {
-            System.out.println("\n--- Menu de reserva ---");
+            System.out.println("\n--- Menú de reserva ---");
             System.out.println("1. Mostrar alojamiento");
             System.out.println("2. Buscar alojamiento");
             System.out.println("3. Confirmar habitaciones disponibles");
@@ -67,11 +67,11 @@ public class Main {
                     LocalDate start = LocalDate.parse(scanner.nextLine());
                     System.out.print("Fecha de fin (YYYY-MM-DD): ");
                     LocalDate end = LocalDate.parse(scanner.nextLine());
-                    System.out.print("Numero de adultos: ");
+                    System.out.print("Número de adultos: ");
                     int adults = scanner.nextInt();
-                    System.out.print("Numero de niños: ");
+                    System.out.print("Número de niños: ");
                     int children = scanner.nextInt();
-                    System.out.print("Numero de habitaciones: ");
+                    System.out.print("Número de habitaciones: ");
                     int rooms = scanner.nextInt();
                     scanner.nextLine();
 
@@ -104,7 +104,7 @@ public class Main {
                     start = LocalDate.parse(scanner.nextLine());
                     System.out.print("Fecha de fin (YYYY-MM-DD): ");
                     end = LocalDate.parse(scanner.nextLine());
-                    System.out.print("Numero de habitaciones: ");
+                    System.out.print("Número de habitaciones: ");
                     int numberOfRooms = scanner.nextInt();
                     scanner.nextLine();
 
@@ -122,7 +122,7 @@ public class Main {
                     String clientLastName = scanner.nextLine();
                     System.out.print("Email: ");
                     String clientEmail = scanner.nextLine();
-                    System.out.print("nacionalidad: ");
+                    System.out.print("Nacionalidad: ");
                     String clientNationality = scanner.nextLine();
                     System.out.print("Teléfono: ");
                     String clientPhone = scanner.nextLine();
@@ -149,22 +149,31 @@ public class Main {
                     System.out.print("Fecha de fin (YYYY-MM-DD): ");
                     end = LocalDate.parse(scanner.nextLine());
 
-                    Room selectedRoom = null;
-                    for (Room room : selectedAccommodation.getRooms()) {
-                        if (room.isAvailable()) {
-                            selectedRoom = room;
-                            break;
-                        }
-                    }
-
-                    if (selectedRoom == null) {
+                    List<Room> availableRoomsForReservation = bookingService.confirmRooms(selectedAccommodation, start, end, 1);
+                    if (availableRoomsForReservation.isEmpty()) {
                         System.out.println("No hay habitaciones disponibles.");
                         break;
                     }
 
+                    System.out.println("Habitaciones disponibles:");
+                    for (int i = 0; i < availableRoomsForReservation.size(); i++) {
+                        Room room = availableRoomsForReservation.get(i);
+                        System.out.println((i + 1) + ". " + room.getRoomType() + " - $" + room.getPrice() + " - " + room.getCaracteristics());
+                    }
+
+                    System.out.print("Seleccione el número de la habitación deseada: ");
+                    int roomChoice = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (roomChoice < 1 || roomChoice > availableRoomsForReservation.size()) {
+                        System.out.println("Selección inválida.");
+                        break;
+                    }
+
+                    Room selectedRoom = availableRoomsForReservation.get(roomChoice - 1);
                     double price = bookingService.calculatePriceWithAdjustments(start, end, selectedRoom.getPrice(), 1); // Calcula el precio con ajustes
                     System.out.println("Precio con ajuste: $" + price);
-                    String reservationResult = bookingService.makerReservation(clientFirstName, clientLastName, clientEmail, clientNationality, clientPhone, clientArrivalTime, selectedAccommodation, selectedRoom, start, end, price);
+                    String reservationResult = bookingService.makeReservation(clientFirstName, clientLastName, clientEmail, clientNationality, clientPhone, clientArrivalTime, selectedAccommodation, selectedRoom, start, end, price);
                     System.out.println(reservationResult);
                     break;
 
@@ -217,13 +226,13 @@ public class Main {
                         }
 
                         if (newRoom == null) {
-                            System.out.println("habitación no disponible.");
+                            System.out.println("Habitación no disponible.");
                             break;
                         }
 
                         String updateResult = bookingService.updateReservation(email, birthDate.toString(), existingBooking, newRoom);
                         System.out.println(updateResult);
-                    } else if (change.equalsIgnoreCase("Alojamiento")) {
+                    } else if (change.equalsIgnoreCase("alojamiento")) {
                         bookingService.getBookings().remove(existingBooking);
                         System.out.println("Reserva eliminada. Por favor, cree una nueva reserva.");
                     } else {
