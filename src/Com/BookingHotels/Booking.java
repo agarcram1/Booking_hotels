@@ -85,5 +85,8 @@ public class Booking {
     public void setRoom(Room room) {
         this.room = room;
     }
-}
 
+    public Alojamiento getAlojamiento() {
+        return alojamiento;
+    }
+}

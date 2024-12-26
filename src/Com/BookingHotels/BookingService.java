@@ -62,8 +62,8 @@ public class BookingService {
         return "Se ha realizado la reserva con éxito.";
     }
 
-    public String updateReservation(String email, Booking existingBooking, Room newRoom) {
-        if (existingBooking.getEmail().equals(email)) {
+    public String updateReservation(String email, String name, Booking existingBooking, Room newRoom) {
+        if (existingBooking.getEmail().equals(email) && existingBooking.getNameClient().equals(name)) {
             existingBooking.showDetails();
             newRoom.setAvailable(false); // Restaura la disponibilidad de la habitación
             existingBooking.getRoom().setAvailable(true); // Reduce la disponibilidad de la habitación
@@ -71,5 +71,9 @@ public class BookingService {
             return "Reserva actualizada con éxito.";
         }
         return "No se ha podido actualizar la reserva.";
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
     }
 }
