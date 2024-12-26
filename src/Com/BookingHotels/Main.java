@@ -20,14 +20,17 @@ public class Main {
         Hotel hotel1 = new Hotel("Hotel Cartagena", "Cartagena", 5, roomsHotel1, "Hotel", 0);
         accommodations.add(hotel1);
 
-        List<Room> roomsHotel2 = new ArrayList<>();
-        roomsHotel2.add(new Room("Suite", 200000, "1 cama king, jacuzzi, aire acondicionado", true));
-        roomsHotel2.add(new Room("Doble", 150000, "2 camas, aire acondicionado y baño privado", true));
-        roomsHotel2.add(new Room("Sencilla", 80000, "1 cama, aire acondicionado y balcón", true));
-        roomsHotel2.add(new Room("Familiar", 250000, "4 camas, aire acondicionado y baño privado", true));
-        roomsHotel2.add(new Room("Presidencial", 300000, "1 cama king, jacuzzi, aire acondicionado, sala de estar", true));
-        Hotel hotel2 = new Hotel("Hotel Bogotá", "Bogotá", 4, roomsHotel2, "Hotel", 0);
-        accommodations.add(hotel2);
+        List<Room> roomsApartment = new ArrayList<>();
+        roomsApartment.add(new Room("Estudio", 50000, "1 cama, cocina, baño privado", true));
+        roomsApartment.add(new Room("Dúplex", 100000, "2 camas, cocina, baño privado", true));
+        Apartamento apartment = new Apartamento("Apartamento Medellín", "Medellín", 4, roomsApartment, "Apartamento", 0);
+        accommodations.add(apartment);
+
+        List<Room> roomsFarm = new ArrayList<>();
+        roomsFarm.add(new Room("Cabaña", 80000, "1 cama, vista al campo", true));
+        roomsFarm.add(new Room("Casa", 150000, "3 camas, cocina, baño privado", true));
+        Finca farm = new Finca("Finca La Esperanza", "Armenia", 5, roomsFarm, "Finca", 0);
+        accommodations.add(farm);
 
         List<Room> roomsDayOfSun = new ArrayList<>();
         roomsDayOfSun.add(new Room("Cabaña", 50000, "Vista a la represa, piscina privada", true));
@@ -61,7 +64,7 @@ public class Main {
                 case 2:
                     System.out.print("Ciudad: ");
                     String city = scanner.nextLine();
-                    System.out.print("Tipo de alojamiento (Hotel, DiaDeSol): ");
+                    System.out.print("Tipo de alojamiento (Hotel, Apartamento, Finca, DiaDeSol): ");
                     String type = scanner.nextLine();
                     System.out.print("Fecha de inicio (YYYY-MM-DD): ");
                     LocalDate start = LocalDate.parse(scanner.nextLine());
@@ -79,6 +82,11 @@ public class Main {
                     System.out.println("Resultados de búsqueda:");
                     for (Alojamiento accommodation : results) {
                         accommodation.showDetails();
+                        if (accommodation instanceof DayOfSun) {
+                            DayOfSun dayOfSunAccommodation = (DayOfSun) accommodation;
+                            System.out.println("Activities: " + String.join(", ", dayOfSunAccommodation.getActivities()));
+                            System.out.println("Includes Lunch: " + (dayOfSunAccommodation.isIncludesLunch() ? "Yes" : "No"));
+                        }
                         System.out.println("Precio total: $" + accommodation.getCalculatedPrice());
                         System.out.println("****************************");
                     }
