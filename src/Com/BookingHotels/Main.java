@@ -20,23 +20,24 @@ public class Main {
         Hotel hotel1 = new Hotel("Hotel Cartagena", "Cartagena", 5, roomsHotel1, "Hotel", 0);
         accommodations.add(hotel1);
 
-        List<Room> roomsApartment = new ArrayList<>();
-        roomsApartment.add(new Room("Estudio", 50000, "1 cama, cocina, baño privado", true));
-        roomsApartment.add(new Room("Dúplex", 100000, "2 camas, cocina, baño privado", true));
-        Apartamento apartment = new Apartamento("Apartamento Medellín", "Medellín", 4, roomsApartment, "Apartamento", 0);
-        accommodations.add(apartment);
-
-        List<Room> roomsFarm = new ArrayList<>();
-        roomsFarm.add(new Room("Cabaña", 80000, "1 cama, vista al campo", true));
-        roomsFarm.add(new Room("Casa", 150000, "3 camas, cocina, baño privado", true));
-        Finca farm = new Finca("Finca La Esperanza", "Armenia", 5, roomsFarm, "Finca", 0);
-        accommodations.add(farm);
-
         List<Room> roomsDayOfSun = new ArrayList<>();
         roomsDayOfSun.add(new Room("Cabaña", 50000, "Vista a la represa, piscina privada", true));
         List<String> activities = List.of("Natación", "Tenis", "Spa");
         DayOfSun dayOfSun = new DayOfSun("Club Sol y Arena", "Peñol", 4, roomsDayOfSun, activities, true, "DayOfSun", 0);
         accommodations.add(dayOfSun);
+
+        // Crear apartamentos
+        List<Room> roomsApartment1 = new ArrayList<>();
+        roomsApartment1.add(new Room("Estudio", 80000, "1 cama, cocina, aire acondicionado", true));
+        Apartamento apartment1 = new Apartamento("Apartamento Medellín", "Medellín", 4, roomsApartment1, "Apartamento", 0);
+        accommodations.add(apartment1);
+
+        // Crear fincas
+        List<Room> roomsFinca1 = new ArrayList<>();
+        roomsFinca1.add(new Room("Habitación Principal", 150000, "1 cama king, aire acondicionado, baño privado", true));
+        roomsFinca1.add(new Room("Habitación Secundaria", 100000, "2 camas, aire acondicionado, baño compartido", true));
+        Finca finca1 = new Finca("Finca La Esperanza", "Armenia", 5, roomsFinca1, "Finca", 0);
+        accommodations.add(finca1);
 
         BookingService bookingService = new BookingService(accommodations, new ArrayList<>());
 
@@ -50,8 +51,15 @@ public class Main {
             System.out.println("6. Salir");
             System.out.print("Selecciona una opción: ");
 
-            int option = scanner.nextInt();
-            scanner.nextLine();
+            int option = 0;
+            if (scanner.hasNextInt()) {
+                option = scanner.nextInt();
+                scanner.nextLine();
+            } else {
+                System.out.println("Opción no válida. Por favor, ingrese un número.");
+                scanner.nextLine(); // Clear the invalid input
+                continue;
+            }
 
             switch (option) {
                 case 1:
@@ -64,12 +72,12 @@ public class Main {
                 case 2:
                     System.out.print("Ciudad: ");
                     String city = scanner.nextLine();
-                    System.out.print("Tipo de alojamiento (Hotel, Apartamento, Finca, DiaDeSol): ");
+                    System.out.print("Tipo de alojamiento (Hotel, DiaDeSol): ");
                     String type = scanner.nextLine();
                     System.out.print("Fecha de inicio (YYYY-MM-DD): ");
-                    LocalDate start = LocalDate.parse(scanner.nextLine());
+                    LocalDate start = LocalDate.parse(scanner.nextLine().trim());
                     System.out.print("Fecha de fin (YYYY-MM-DD): ");
-                    LocalDate end = LocalDate.parse(scanner.nextLine());
+                    LocalDate end = LocalDate.parse(scanner.nextLine().trim());
                     System.out.print("Número de adultos: ");
                     int adults = scanner.nextInt();
                     System.out.print("Número de niños: ");
@@ -82,11 +90,6 @@ public class Main {
                     System.out.println("Resultados de búsqueda:");
                     for (Alojamiento accommodation : results) {
                         accommodation.showDetails();
-                        if (accommodation instanceof DayOfSun) {
-                            DayOfSun dayOfSunAccommodation = (DayOfSun) accommodation;
-                            System.out.println("Activities: " + String.join(", ", dayOfSunAccommodation.getActivities()));
-                            System.out.println("Includes Lunch: " + (dayOfSunAccommodation.isIncludesLunch() ? "Yes" : "No"));
-                        }
                         System.out.println("Precio total: $" + accommodation.getCalculatedPrice());
                         System.out.println("****************************");
                     }
@@ -109,9 +112,9 @@ public class Main {
                     }
 
                     System.out.print("Fecha de inicio (YYYY-MM-DD): ");
-                    start = LocalDate.parse(scanner.nextLine());
+                    start = LocalDate.parse(scanner.nextLine().trim());
                     System.out.print("Fecha de fin (YYYY-MM-DD): ");
-                    end = LocalDate.parse(scanner.nextLine());
+                    end = LocalDate.parse(scanner.nextLine().trim());
                     System.out.print("Número de habitaciones: ");
                     int numberOfRooms = scanner.nextInt();
                     scanner.nextLine();
@@ -153,9 +156,9 @@ public class Main {
                     }
 
                     System.out.print("Fecha de inicio (YYYY-MM-DD): ");
-                    start = LocalDate.parse(scanner.nextLine());
+                    start = LocalDate.parse(scanner.nextLine().trim());
                     System.out.print("Fecha de fin (YYYY-MM-DD): ");
-                    end = LocalDate.parse(scanner.nextLine());
+                    end = LocalDate.parse(scanner.nextLine().trim());
 
                     List<Room> availableRoomsForReservation = bookingService.confirmRooms(selectedAccommodation, start, end, 1);
                     if (availableRoomsForReservation.isEmpty()) {
@@ -178,18 +181,24 @@ public class Main {
                         break;
                     }
 
+                    System.out.print("Número de adultos: ");
+                    adults = scanner.nextInt();
+                    System.out.print("Número de niños: ");
+                    children = scanner.nextInt();
+                    scanner.nextLine(); // Consume the newline character
+
                     Room selectedRoom = availableRoomsForReservation.get(roomChoice - 1);
                     double price = bookingService.calculatePriceWithAdjustments(start, end, selectedRoom.getPrice(), 1); // Calcula el precio con ajustes
                     System.out.println("Precio con ajuste: $" + price);
-                    String reservationResult = bookingService.makeReservation(clientFirstName, clientLastName, clientEmail, clientNationality, clientPhone, clientArrivalTime, selectedAccommodation, selectedRoom, start, end, price);
+                    String reservationResult = bookingService.makeReservation(clientFirstName, clientLastName, clientEmail, clientNationality, clientPhone, clientArrivalTime, selectedAccommodation, selectedRoom, start, end, price, adults, children);
                     System.out.println(reservationResult);
                     break;
 
                 case 5:
                     System.out.print("Email del cliente: ");
                     String email = scanner.nextLine();
-                    System.out.print("Fecha de nacimiento (YYYY-MM-DD): ");
-                    LocalDate birthDate = LocalDate.parse(scanner.nextLine());
+                    System.out.print("Nombre del cliente: ");
+                    String name = scanner.nextLine();
 
                     System.out.print("Nombre del alojamiento: ");
                     accommodationName = scanner.nextLine();
@@ -208,7 +217,7 @@ public class Main {
 
                     Booking existingBooking = null;
                     for (Booking booking : bookingService.getBookings()) {
-                        if (booking.getEmail().equals(email) && booking.getAlojamiento().equals(selectedAccommodation)) {
+                        if (booking.getEmail().equals(email) && booking.getNameClient().equals(name) && booking.getAlojamiento().equals(selectedAccommodation)) {
                             existingBooking = booking;
                             break;
                         }
@@ -238,7 +247,7 @@ public class Main {
                             break;
                         }
 
-                        String updateResult = bookingService.updateReservation(email, birthDate.toString(), existingBooking, newRoom);
+                        String updateResult = bookingService.updateReservation(email, name, existingBooking, newRoom);
                         System.out.println(updateResult);
                     } else if (change.equalsIgnoreCase("alojamiento")) {
                         bookingService.getBookings().remove(existingBooking);

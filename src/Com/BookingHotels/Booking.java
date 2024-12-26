@@ -14,8 +14,10 @@ public class Booking {
     private LocalDate checkIn; // Fecha de llegada
     private LocalDate checkOut; // Fecha de salida
     private double price; // Precio total de la reserva
+    private int numAdults; // Número de adultos
+    private int numChildren; // Número de niños
 
-    public Booking(String nameClient, String lastNameClient, String email, String nacionality, String phone, String arrivalTime, Alojamiento alojamiento, Room room, LocalDate checkIn, LocalDate checkOut, double price) {
+    public Booking(String nameClient, String lastNameClient, String email, String nacionality, String phone, String arrivalTime, Alojamiento alojamiento, Room room, LocalDate checkIn, LocalDate checkOut, double price, int numAdults, int numChildren) {
         this.nameClient = nameClient;
         this.lastNameClient = lastNameClient;
         this.email = email;
@@ -27,6 +29,8 @@ public class Booking {
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.price = price;
+        this.numAdults = numAdults;
+        this.numChildren = numChildren;
     }
 
     public void showDetails() {
@@ -40,6 +44,8 @@ public class Booking {
         System.out.println("Check-in: " + checkIn);
         System.out.println("Check-out: " + checkOut);
         System.out.println("Price: $" + price);
+        System.out.println("Number of adults: " + numAdults);
+        System.out.println("Number of children: " + numChildren);
     }
 
     public String getNameClient() {
@@ -78,6 +84,26 @@ public class Booking {
         return phone;
     }
 
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(String arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public Alojamiento getAlojamiento() {
+        return alojamiento;
+    }
+
+    public void setAlojamiento(Alojamiento alojamiento) {
+        this.alojamiento = alojamiento;
+    }
+
     public Room getRoom() {
         return room;
     }
@@ -86,7 +112,44 @@ public class Booking {
         this.room = room;
     }
 
-    public Alojamiento getAlojamiento() {
-        return alojamiento;
+    public LocalDate getCheckIn() {
+        return checkIn;
+    }
+
+    public void setCheckIn(LocalDate checkIn) {
+        this.checkIn = checkIn;
+    }
+
+    public LocalDate getCheckOut() {
+        return checkOut;
+    }
+
+    public void setCheckOut(LocalDate checkOut) {
+        this.checkOut = checkOut;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    // Getters and setters for the new fields
+    public int getNumAdults() {
+        return numAdults;
+    }
+
+    public void setNumAdults(int numAdults) {
+        this.numAdults = numAdults;
+    }
+
+    public int getNumChildren() {
+        return numChildren;
+    }
+
+    public void setNumChildren(int numChildren) {
+        this.numChildren = numChildren;
     }
 }

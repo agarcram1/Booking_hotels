@@ -2,7 +2,7 @@ package Com.BookingHotels;
 
 import java.util.List;
 
-public class DayOfSun extends Alojamiento {
+public class DayOfSun extends Alojamiento implements ICalculate {
     private List<String> activities; // Lista de actividades
     private boolean includesLunch; // Indica si incluye almuerzo o refrigerio
 
@@ -40,5 +40,14 @@ public class DayOfSun extends Alojamiento {
             System.out.println("Room: " + room.getRoomType() + ", Price per night: $" + room.getPrice());
         }
         System.out.println("Calculated Price: $" + getCalculatedPrice());
+    }
+
+    @Override
+    public double calculatePrice(int days, int numberOfRooms) {
+        double totalPrice = 0;
+        for (Room room : getRooms()) {
+            totalPrice += room.getPrice() * days;
+        }
+        return totalPrice * numberOfRooms;
     }
 }

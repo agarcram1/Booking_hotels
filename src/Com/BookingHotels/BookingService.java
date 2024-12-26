@@ -1,5 +1,7 @@
 package Com.BookingHotels;
 
+
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class BookingService {
 
     public BookingService(List<Alojamiento> alojamientos, List<Booking> bookings) {
         this.alojamientos = alojamientos;
-        this.bookings = new ArrayList<>();
+        this.bookings = bookings;
     }
 
     public List<Alojamiento> searchForAccomodation(String ciudad, String tipo, LocalDate inicio, LocalDate fin, int adultos, int niños, int habitaciones) {
@@ -30,9 +32,9 @@ public class BookingService {
         long days = ChronoUnit.DAYS.between(checkIn, checkOut);
         double totalPrice = days * pricePerNight * numberOfRooms;
 
-        boolean lastFiveDays = checkOut.getDayOfMonth() > 25; // Últimos 5 días del mes
-        boolean between10and15 = checkIn.getDayOfMonth() <= 15 && checkOut.getDayOfMonth() >= 10; // Entre el 10 y el 15
-        boolean between5and10 = checkIn.getDayOfMonth() <= 10 && checkOut.getDayOfMonth() >= 5; // Entre el 5 y el 10
+        boolean lastFiveDays = days <= 5;
+        boolean between10and15 = days >= 10 && days <= 15;
+        boolean between5and10 = days > 5 && days < 10;
 
         if (lastFiveDays) {
             totalPrice *= 1.15; // Incremento de 15%
@@ -55,8 +57,8 @@ public class BookingService {
         return isAvailable;
     }
 
-    public String makeReservation(String nameClient, String lastNameClient, String email, String nacionality, String phone, String arrivalTime, Alojamiento alojamiento, Room room, LocalDate checkIn, LocalDate checkOut, double price) {
-        Booking booking = new Booking(nameClient, lastNameClient, email, nacionality, phone, arrivalTime, alojamiento, room, checkIn, checkOut, price);
+    public String makeReservation(String nameClient, String lastNameClient, String email, String nacionality, String phone, String arrivalTime, Alojamiento alojamiento, Room room, LocalDate checkIn, LocalDate checkOut, double price, int numAdults, int numChildren) {
+        Booking booking = new Booking(nameClient, lastNameClient, email, nacionality, phone, arrivalTime, alojamiento, room, checkIn, checkOut, price, numAdults, numChildren);
         bookings.add(booking);
         room.setAvailable(false); // Reduce la disponibilidad de la habitación
         return "Se ha realizado la reserva con éxito.";
