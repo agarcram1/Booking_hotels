@@ -1,41 +1,37 @@
-package Com.BookingHotels;
+package com.bookinghotels;
 
+import Com.BookingHotels.Acomodation;
+import Com.BookingHotels.Room;
 
 import java.util.List;
 
-// Clase para representar un hotel
-public class Hotel extends Acomodation implements ICalculate {
-    private String accommodationType; // Hotel, apartamento, finca
+// Clase para representar una finca
+public class State extends Acomodation {
+    private String accommodationType; // Finca
 
-    public Hotel(String name, String city, int rating, List<Room> rooms, String accommodationType, double calculatedPrice) {
+    public State(String name, String city, int rating, List<Room> rooms, String accommodationType, double calculatedPrice) {
         super(name, city, rating, rooms, accommodationType, calculatedPrice);
         this.accommodationType = accommodationType;
     }
 
-    @Override
     public String getAccommodationType() {
         return accommodationType;
     }
 
+    public void setAccommodationType(String accommodationType) {
+        this.accommodationType = accommodationType;
+    }
+
     @Override
     public void showDetails() {
-        System.out.println("Hotel: " + getName());
-        System.out.println("City: " + getCity());
-        System.out.println("Rating: " + getRating());
-        System.out.println("Type of hotel: " + getAccommodationType());
-        System.out.println("Rooms: ");
+        System.out.println("Finca: " + getName());
+        System.out.println("Ciudad: " + getCity());
+        System.out.println("Calificación: " + getRating());
+        System.out.println("Tipo de finca: " + getAccommodationType());
+        System.out.println("Habitaciones: ");
         for (Room room : getRooms()) {
             System.out.println("Habitación: " + room.getRoomType() + ", Precio por noche: $" + room.getPrice());
         }
-    }
-
-    // Método para calcular el precio de la estancia en un hotel
-    public double calculatePrice(int days, int numberOfRooms) {
-        double totalPrice = 0;
-        for (Room room : getRooms()) {
-            totalPrice += room.getPrice() * days;
-        }
-        return totalPrice * numberOfRooms;
     }
 
     @Override

@@ -2,7 +2,7 @@ package Com.BookingHotels;
 
 import java.util.List;
 
-public class DayOfSun extends Alojamiento implements ICalculate {
+public class DayOfSun extends Acomodation implements ICalculate {
     private List<String> activities; // Lista de actividades
     private boolean includesLunch; // Indica si incluye almuerzo o refrigerio
 

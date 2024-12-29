@@ -2,7 +2,7 @@ package Com.BookingHotels;
 
 import java.util.List;
 
-public abstract class Alojamiento {
+public abstract class Acomodation {
     private String name;
     private String city;
     private int rating; // Calificación de 1 a 5
@@ -11,7 +11,7 @@ public abstract class Alojamiento {
     private double calculatedPrice;
 
 
-    public Alojamiento(String name, String city, int rating, List<Room> rooms, String accommodationType, double calculatedPrice) {
+    public Acomodation(String name, String city, int rating, List<Room> rooms, String accommodationType, double calculatedPrice) {
         this.name = name;
         this.city = city;
         this.rating = rating;
