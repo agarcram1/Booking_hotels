@@ -1,4 +1,6 @@
-package Com.BookingHotels;
+package Com.BookingHotels.Model;
+
+import Com.BookingHotels.ICalculate;
 
 import java.util.List;
 

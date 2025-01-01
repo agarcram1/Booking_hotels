@@ -1,4 +1,8 @@
+/*
 package Com.BookingHotels;
+ */
+
+/*
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -60,7 +64,7 @@ public class BookingService {
 
     public String updateReservation(String email, String name, Booking existingBooking, Room newRoom) {
         if (existingBooking.getEmail().equals(email) && existingBooking.getNameClient().equals(name)) {
-            existingBooking.showDetails();
+            existingBooking.toString();
             newRoom.setAvailable(false); // Reduce la disponibilidad de la nueva habitación
             existingBooking.getRoom().setAvailable(true); // Restaura la disponibilidad de la habitación anterior
             existingBooking.setRoom(newRoom);
@@ -88,3 +92,5 @@ public class BookingService {
         return bookings;
     }
 }
+
+*/

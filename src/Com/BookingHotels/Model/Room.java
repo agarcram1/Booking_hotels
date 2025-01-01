@@ -1,4 +1,4 @@
-package Com.BookingHotels;
+package Com.BookingHotels.Model;
 
 // Clase para representar una habitación
 public class  Room {

@@ -1,4 +1,4 @@
-package Com.BookingHotels;
+package Com.BookingHotels.Model;
 
 import java.time.LocalDate;
 
@@ -33,20 +33,6 @@ public class Booking {
         this.numChildren = numChildren;
     }
 
-    public void showDetails() {
-        System.out.println("Name: " + nameClient + " " + lastNameClient);
-        System.out.println("Email: " + email);
-        System.out.println("Nacionality: " + nacionality);
-        System.out.println("Phone: " + phone);
-        System.out.println("Arrival time: " + arrivalTime);
-        System.out.println("Accommodation: " + acomodation.getName());
-        System.out.println("Room: " + room.getRoomType());
-        System.out.println("Check-in: " + checkIn);
-        System.out.println("Check-out: " + checkOut);
-        System.out.println("Price: $" + price);
-        System.out.println("Number of adults: " + numAdults);
-        System.out.println("Number of children: " + numChildren);
-    }
 
     public String getNameClient() {
         return nameClient;
@@ -86,5 +72,24 @@ public class Booking {
 
     public void setNumChildren(int numChildren) {
         this.numChildren = numChildren;
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "nameClient='" + nameClient + '\'' +
+                ", lastNameClient='" + lastNameClient + '\'' +
+                ", email='" + email + '\'' +
+                ", nacionality='" + nacionality + '\'' +
+                ", phone='" + phone + '\'' +
+                ", arrivalTime='" + arrivalTime + '\'' +
+                ", acomodation=" + acomodation +
+                ", room=" + room +
+                ", checkIn=" + checkIn +
+                ", checkOut=" + checkOut +
+                ", price=" + price +
+                ", numAdults=" + numAdults +
+                ", numChildren=" + numChildren +
+                '}';
     }
 }

@@ -1,4 +1,4 @@
-package Com.BookingHotels;
+package Com.BookingHotels.Model;
 
 import java.util.List;
 
