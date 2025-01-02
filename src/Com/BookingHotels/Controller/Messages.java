@@ -1,4 +1,4 @@
-package Com.BookingHotels.Controller;
+package com.BookingHotels.Controller;
 
 public class Messages {
     public static void showMenu() {

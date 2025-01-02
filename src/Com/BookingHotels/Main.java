@@ -1,9 +1,10 @@
-package Com.BookingHotels;
+package com.BookingHotels;
 
-import Com.BookingHotels.Controller.InputHandler;
+import com.BookingHotels.Controller.InputHandler;
 import Com.BookingHotels.Controller.MenuHandler;
-import Com.BookingHotels.Controller.Messages;
+import com.BookingHotels.Controller.Messages;
 import Com.BookingHotels.Repository.BookingRepository;
+import Com.BookingHotels.Service.BookingService;
 
 public class Main {
     private static BookingRepository bookingRepository;
@@ -11,7 +12,8 @@ public class Main {
 
     public static void main(String[] args) {
         bookingRepository = BookingRepository.getInstance();
-        menuHandler = new MenuHandler(bookingRepository);
+        BookingService bookingService = new BookingService(bookingRepository);
+        menuHandler = new MenuHandler(bookingService);
 
         while (true) {
             Messages.showMenu();

@@ -1,96 +1,85 @@
-/*
-package Com.BookingHotels;
- */
+package Com.BookingHotels.Service;
 
-/*
+import Com.BookingHotels.Controller.Messages;
+import Com.BookingHotels.Model.Acomodation;
+import Com.BookingHotels.Model.Room;
+import Com.BookingHotels.Repository.BookingRepository;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BookingService {
-    private List<Acomodation> accommodations;
-    private List<Booking> bookings;
+    private final BookingRepository bookingRepository;
 
-    public BookingService(List<Acomodation> accommodations, List<Booking> bookings) {
-        this.accommodations = accommodations;
-        this.bookings = bookings;
+    public BookingService(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
     }
 
-    public List<Acomodation> searchForAccomodation(String city, String type, LocalDate start, LocalDate end, int rooms) {
-        List<Acomodation> results = new ArrayList<>();
-        for (Acomodation accommodation : accommodations) {
-            if (accommodation.getCity().equalsIgnoreCase(city) && accommodation.getAccommodationType().equalsIgnoreCase(type)) {
-                double totalPrice = calculatePriceWithAdjustments(start, end, accommodation.getRooms().get(0).getPrice(), rooms);
-                accommodation.setCalculatedPrice(totalPrice);
-                results.add(accommodation);
-            }
-        }
-        return results;
+    public void showAccommodations() {
+        bookingRepository.getAccommodations().forEach(accommodation -> {
+            accommodation.showDetails();
+            System.out.println("****************************");
+        });
     }
 
-    public double calculatePriceWithAdjustments(LocalDate checkIn, LocalDate checkOut, double pricePerNight, int numberOfRooms) {
-        long days = ChronoUnit.DAYS.between(checkIn, checkOut);
-        double totalPrice = days * pricePerNight * numberOfRooms;
+    public void searchAccommodations(String city, String type, LocalDate start, LocalDate end, int rooms) {
+        List<Acomodation> results = bookingRepository.searchForAccomodation(city, type, start, end, rooms);
+        results.forEach(accommodation -> {
+            accommodation.showDetails();
+            System.out.println("Precio total: $" + accommodation.getCalculatedPrice());
+            System.out.println("****************************");
+        });
+    }
 
-        if (days <= 5) {
-            totalPrice *= 1.15; // Incremento de 15%
-        } else if (days >= 10 && days <= 15) {
-            totalPrice *= 1.10; // Incremento de 10%
-        } else if (days > 5 && days < 10) {
-            totalPrice *= 0.92; // Descuento de 8%
+    public void confirmAvailableRooms(String accommodationName, LocalDate start, LocalDate end, int numberOfRooms) {
+        Acomodation accommodation = findAccommodationByName(accommodationName);
+        if (accommodation == null) {
+            Messages.accommodationNotFound();
+            return;
         }
 
-        return totalPrice;
+        List<Room> availableRooms = bookingRepository.confirmRooms(accommodation, start, end, numberOfRooms, 1, 0);
+        availableRooms.forEach(room ->
+                System.out.println(room.getRoomType() + " - $" + room.getPrice() + " - " + room.getCaracteristics())
+        );
     }
 
-    public List<Room> confirmRooms(Acomodation accommodation, LocalDate checkIn, LocalDate checkOut, int numberOfRooms, int adults, int children) {
-        List<Room> availableRooms = new ArrayList<>();
-        for (Room room : accommodation.getRooms()) {
-            if (room.isAvailable()) {
-                availableRooms.add(room);
-            }
+    public void makeReservation(String[] clientDetails, String accommodationName, int[] guestCounts, LocalDate[] dates) {
+        Acomodation accommodation = findAccommodationByName(accommodationName);
+        if (accommodation == null) {
+            Messages.accommodationNotFound();
+            return;
         }
-        return availableRooms;
-    }
 
-    public String makeReservation(String clientFirstName, String clientLastName, String email, String nationality, String phone, String arrivalTime, Acomodation accommodation, Room room, LocalDate checkIn, LocalDate checkOut, double price, int numAdults, int numChildren) {
-        Booking booking = new Booking(clientFirstName, clientLastName, email, nationality, phone, arrivalTime, accommodation, room, checkIn, checkOut, price, numAdults, numChildren);
-        bookings.add(booking);
-        room.setAvailable(false); // Reduce la disponibilidad de la habitación
-        return "Se ha realizado la reserva con éxito.";
-    }
-
-    public String updateReservation(String email, String name, Booking existingBooking, Room newRoom) {
-        if (existingBooking.getEmail().equals(email) && existingBooking.getNameClient().equals(name)) {
-            existingBooking.toString();
-            newRoom.setAvailable(false); // Reduce la disponibilidad de la nueva habitación
-            existingBooking.getRoom().setAvailable(true); // Restaura la disponibilidad de la habitación anterior
-            existingBooking.setRoom(newRoom);
-            return "Reserva actualizada con éxito.";
+        List<Room> availableRooms = bookingRepository.confirmRooms(accommodation, dates[0], dates[1], 1, guestCounts[0], guestCounts[1]);
+        if (availableRooms.isEmpty()) {
+            Messages.noRoomsAvailable();
+            return;
         }
-        return "No se ha podido actualizar la reserva.";
+
+        Room selectedRoom = availableRooms.get(0); // Puede incluir lógica para que el usuario elija la habitación.
+        double price = bookingRepository.calculatePriceWithAdjustments(dates[0], dates[1], selectedRoom.getPrice(), 1);
+
+        String result = bookingRepository.makeReservation(
+                clientDetails[0], clientDetails[1], clientDetails[2], clientDetails[3], clientDetails[4], clientDetails[5],
+                accommodation, selectedRoom, dates[0], dates[1], price, guestCounts[0], guestCounts[1]
+        );
+        System.out.println(result);
     }
 
-    public String cancelReservation(String email, String name) {
-        for (Booking booking : bookings) {
-            if (booking.getEmail().equals(email) && booking.getNameClient().equals(name)) {
-                bookings.remove(booking);
-                booking.getRoom().setAvailable(true); // Restaurar la disponibilidad de la habitación
-                return "Reserva cancelada con éxito.";
-            }
-        }
-        return "Reserva no encontrada.";
+    public void updateReservation(String email, String name, String accommodationName, String changeType, String newRoomName) {
+        // Lógica similar a la anterior, pero delegada aquí.
     }
 
-    public List<Acomodation> getAccommodations() {
-        return accommodations;
+    public void cancelReservation(String email, String name) {
+        String result = bookingRepository.cancelReservation(email, name);
+        System.out.println(result);
     }
 
-    public List<Booking> getBookings() {
-        return bookings;
+    private Acomodation findAccommodationByName(String name) {
+        return bookingRepository.getAccommodations().stream()
+                .filter(accommodation -> accommodation.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 }
-
-*/

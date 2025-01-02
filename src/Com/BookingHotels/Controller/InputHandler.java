@@ -1,4 +1,6 @@
-package Com.BookingHotels.Controller;
+package com.BookingHotels.Controller;
+
+import Com.BookingHotels.Controller.Messages;
 
 import java.time.LocalDate;
 import java.util.Scanner;
